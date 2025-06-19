@@ -45,11 +45,28 @@ bool Input::isPressed(int key)
 	return false;
 }
 
+
+bool Input::isReleased(int key)
+{
+	released.push_back(key);
+	return false;
+}
+
+
 void Input::update()
 {
 	for (int i = 0; i < pressed.size(); i++)
 	{
 		setKeyUp(pressed[i]);
+
+		for (int j = 0; j < released.size(); j++)
+		{
+			if (released[i] == pressed[i])
+			{
+
+			}
+				
+		}
 	}
 	pressed.clear();
 

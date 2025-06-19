@@ -28,7 +28,9 @@ public:
 	void setKeyUp(int key);
 	bool isKeyDown(int key);
 	bool isPressed(int key);
+	bool isReleased(int key);
 	void update();
+
 
 	// Functions are mouse input, including getting and setting current position and mouse button presses.
 	void setMouseX(int lx);
@@ -47,6 +49,8 @@ private:
 	// Array of booleans representing keys (pressed = true, released = false)
 	bool keys[256]{ false };
 	std::vector<int> pressed;
+	std::vector<int> released;
+	bool releaseCheck;
 	// Mouse variable
 	Mouse mouse;
 };

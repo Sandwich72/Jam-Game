@@ -16,6 +16,7 @@ public:
 
 protected:
 	enum States { UP, OVER, DOWN };
+	bool active;
 	bool isMouseOver;
 	sf::Texture sprite[3];
 	bool clicked;

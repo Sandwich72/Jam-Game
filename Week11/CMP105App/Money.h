@@ -9,6 +9,7 @@ public:
 	void update(float dt);
 	void addMoney(int nCash);
 	int getMoney();
+	int* getPointer();
 protected:
 	int cash;
 };

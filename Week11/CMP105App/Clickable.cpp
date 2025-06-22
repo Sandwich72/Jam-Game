@@ -76,6 +76,7 @@ void Clickable::handleInput(float dt)
 		setTexture(&sprite[UP]);
 		//setFillColor(sf::Color(255,0,0,128));
 		isMouseOver = false;
+		clicked = false;
 	}
 	
 }

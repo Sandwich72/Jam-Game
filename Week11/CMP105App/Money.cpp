@@ -16,14 +16,17 @@ Money::Money(sf::RenderWindow* nWindow, sf::Font* font)
 	setTexture(&sprite[UP]);
 	setSize(sf::Vector2f(sprite[UP].getSize()));
 	setCollisionBox(0, 0, getSize().x, getSize().y);
-	setFillColor(sf::Color(255, 255, 255, 128));
+	setFillColor(sf::Color(255, 255, 255, 0));
 	setCollider(true);
 	setOrigin(getSize().x / 2, getSize().y / 2);
 	setPosition(window->getDefaultView().getSize().x * .8, window->getDefaultView().getSize().y * .10);
 	text.setPosition(getPosition());
+	text.setFillColor(sf::Color::White);
+	text.setOutlineColor(sf::Color(34, 168, 49));
+	text.setOutlineThickness(2);
 	text.setCharacterSize(24);
 	text.setPosition(getPosition());
-	text.setString("balls");
+	text.setString("£0");
 	text.setFont(*font);
 
 	cash = 0;
@@ -48,4 +51,9 @@ void Money::addMoney(int nCash)
 int Money::getMoney()
 {
 	return cash;
+}
+
+int* Money::getPointer()
+{
+	return &cash;
 }

@@ -171,11 +171,14 @@
     <ClCompile Include="Framework\SoundObject.cpp" />
     <ClCompile Include="Framework\TileMap.cpp" />
     <ClCompile Include="Framework\VectorHelper.cpp" />
+    <ClCompile Include="Home.cpp" />
     <ClCompile Include="Lane.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Money.cpp" />
     <ClCompile Include="Motivate.cpp" />
+    <ClCompile Include="MotivationBar.cpp" />
+    <ClCompile Include="PassTimes.cpp" />
     <ClCompile Include="Patron.cpp" />
     <ClCompile Include="Tapper.cpp" />
   </ItemGroup>
@@ -197,10 +200,13 @@
     <ClInclude Include="Framework\SoundObject.h" />
     <ClInclude Include="Framework\TileMap.h" />
     <ClInclude Include="Framework\VectorHelper.h" />
+    <ClInclude Include="Home.h" />
     <ClInclude Include="Lane.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Money.h" />
     <ClInclude Include="Motivate.h" />
+    <ClInclude Include="MotivationBar.h" />
+    <ClInclude Include="PassTimes.h" />
     <ClInclude Include="Patron.h" />
     <ClInclude Include="Tapper.h" />
   </ItemGroup>

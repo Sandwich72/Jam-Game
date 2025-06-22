@@ -30,6 +30,21 @@ bool Collision::checkBoundingBox(GameObject* s1, sf::Vector2i s2)
 	return true;
 }
 
+// Check AABB for collision. Returns true if collision occurs.
+bool Collision::checkBoundingBox(GameObject* s1, sf::IntRect s2)
+{
+	if (s1->getCollisionBox().left + s1->getCollisionBox().width < s2.left)
+		return false;
+	if (s1->getCollisionBox().left > s2.left + s2.width)
+		return false;
+	if (s1->getCollisionBox().top + s1->getCollisionBox().height < s2.top)
+		return false;
+	if (s1->getCollisionBox().top > s2.top + s2.height)
+		return false;
+
+	return true;
+}
+
 // Check bounding circle collision. Returns true if collision occurs.
 bool Collision::checkBoundingCircle(GameObject* s1, GameObject* s2)
 {

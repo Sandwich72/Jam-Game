@@ -36,6 +36,7 @@ public:
 	void play(bool play) { isPlaying = true; };
 	void stop();
 	void pause() { isPlaying = false; };
+	int getCurrentFrameNum() { return currentFrame; };
 
 protected:
 	std::vector<sf::IntRect>frames;

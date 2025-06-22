@@ -1,6 +1,6 @@
 #include "Beer.h"
 #include<iostream>
-Beer::Beer(int* nMoney)
+Beer::Beer(int nLane, Money* nMoney)
 {
 	sprite.loadFromFile("gfx/Beer.png", sf::IntRect(384, 0, 64, 64));
 	setTexture(&sprite);
@@ -9,6 +9,7 @@ Beer::Beer(int* nMoney)
 	setScale(.5, .5);
 	isDrank = false;
 	money = nMoney;
+	lane = nLane;
 }
 
 Beer::~Beer()
@@ -20,6 +21,11 @@ bool Beer::getIsDrank()
 	return isDrank;
 }
 
+int Beer::getLane()
+{
+	return lane;
+}
+
 void Beer::update(float dt)
 {
 	move(dt * 100,0);
@@ -28,8 +34,14 @@ void Beer::update(float dt)
 
 void Beer::collisionResponse(GameObject* collider)
 {
-	std::cout << "BALLS\n";
-	money += 5;
+	if (dynamic_cast<Patron*> (collider))
+	{
+		money->addMoney(5);
+		
+	}
+	else
+	{
+		money->addMoney(-2);
+	}
 	isDrank = true;
-
 }

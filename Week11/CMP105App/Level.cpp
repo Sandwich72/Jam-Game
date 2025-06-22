@@ -12,29 +12,32 @@ Level::Level(sf::RenderWindow* hwnd, Input* in, GameState* gs, AudioManager* aud
 	// initialise game objects
 	audio->addMusic("sfx/cantina.ogg", "cantina");
 
+
+
+	bgSprite.loadFromFile("gfx/map (2).png");
+	bg.setTexture(&bgSprite);
+	bg.setSize(sf::Vector2f(window->getSize()));
+	bg.setOrigin(bg.getSize().x / 2, bg.getSize().y / 2);
+	bg.setPosition(window->getDefaultView().getCenter());
+
 	//UI
-	mush.setPosition(window->getDefaultView().getCenter());
-	mush.setInput(in);
+
 
 	money = new Money(window, &font);
 	money->setInput(in);
 
+	patSpawnedThisRound = 0;
+	day=0;
+
 	for (int i = 0; i < 4; i++)
 	{
-		lane.push_back(new Lane(&patOnScreen, &beer));
-		lane[i]->setPosition(100, 100 * (i + 1));
-	}
-	//lane.push_back (new Lane(&patOnScreen,&beer));
-	//lane.push_back(new Lane(&patOnScreen,&beer));
-	//lane[0]->setPosition(100, 100);
-	//lane[1]->setPosition(100, 200);
-	tapper = new Tapper(&lane,&beer,);
-	tapper->setInput(in);
-	//tapper->addLanes(&lane);
-	//tapper->setPosition(lane[rand() % 4]->getPosition());
-	//tapper->setPosition(lane[0]->getPosition().x-32,lane[0]->getPosition().y-32);
+		lane.push_back(new Lane(i, &patOnScreen, &beer,&patSpawnedThisRound,&day));
 
-	
+	}
+
+	tapper = new Tapper(&lane, &beer, money);
+	tapper->setInput(in);
+
 }
 
 Level::~Level()
@@ -42,10 +45,23 @@ Level::~Level()
 
 }
 
+
+void Level::endDay()
+{
+	gameState->setCurrentState(State::HOMELEVEL);
+	day++;
+	patSpawnedThisRound = 0;
+}
+
+
 // handle user input
 void Level::handleInput(float dt)
 {
-	mush.handleInput(dt);
+	if (input->isPressed(sf::Keyboard::Escape))
+	{
+		window->close();
+	}
+
 	money->handleInput(dt);
 	tapper->handleInput(dt);
 }
@@ -53,56 +69,79 @@ void Level::handleInput(float dt)
 // Update game objects
 void Level::update(float dt)
 {
+	//std::cout<<audio->getMusic()->getVolume()<<std::endl;
 	tapper->update(dt);
+
+	//std::cout << lane[0]->getEndBar().left << "     " << tapper->getPosition().x << std::endl;
 
 	for (int i = 0; i < lane.size(); i++)
 	{
 		lane[i]->update(dt);
-	}
 
-	for (int i = 0; i < beer.size(); i++)
-	{
-		beer[i]->update(dt);
 
-		for (int j = 0; j < patOnScreen.size(); j++)
+
+		for (int j = 0; j < beer.size(); j++)
 		{
-			if (Collision::checkBoundingBox(beer[i], patOnScreen[j]))
+			if (beer[j]->getLane() == i)
 			{
-				beer[i]->collisionResponse(patOnScreen[j]);
-				patOnScreen[j]->collisionResponse(beer[i]);
+				beer[j]->update(dt);
+				if (Collision::checkBoundingBox(beer[j], lane[i]->getEndBar()))
+				{
+					beer[j]->collisionResponse(lane[i]);
+				}
+
+				for (int k = 0; k < patOnScreen.size(); k++)
+				{
+					if (Collision::checkBoundingBox(beer[j], patOnScreen[k]))
+					{
+						beer[j]->collisionResponse(patOnScreen[k]);
+						patOnScreen[k]->collisionResponse(beer[j]);
+					}
+				}
+
+				if (beer[j]->getIsDrank())
+				{
+					delete beer[j];
+					beer.erase(beer.begin() + j);
+
+				}
 			}
 		}
-
-		if (beer[i]->getIsDrank())
+		
+		for (int j = 0; j < patOnScreen.size(); j++)
 		{
-			delete beer[i];
-			beer.erase(beer.begin() + i);
-			//money->addMoney(5);
+			if (patOnScreen[j]->getLane() == i)
+			{
+				patOnScreen[j]->update(dt);
+				if (patOnScreen[j]->getSatisfied() == true)
+				{
+					delete patOnScreen[j];
+					patOnScreen.erase(patOnScreen.begin() + j);
+					
+				}
+			}
 		}
 	}
 
-
-	for (int i = 0; i < patOnScreen.size(); i++)
+	if (maxPatrons[day] == patSpawnedThisRound && patOnScreen.size() == 0)
 	{
-		patOnScreen[i]->update(dt);
-		if (patOnScreen[i]->getSatisfied() == true)
-		{
-			delete patOnScreen[i];
-			patOnScreen.erase(patOnScreen.begin() + i);
-		}
+		endDay();
 	}
+	
 }
 
 // Render level
 void Level::render()
 {
 	beginDraw();
-	window->draw(mush);
+	window->draw(bg);
 	window->draw(*tapper);
+	
 	for (int i = 0; i < lane.size(); i++)
 	{
 		window->draw(*lane[i]);
 	}
+	window->draw(tapper->getBeer());
 	for (int i = 0; i < beer.size(); i++)
 	{
 		window->draw(*beer[i]);
@@ -114,7 +153,8 @@ void Level::render()
 
 	window->draw(*money);
 	window->draw(money->getText());
-	//money->drawText();
 	endDraw();
 }
+
+
 

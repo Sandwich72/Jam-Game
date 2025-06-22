@@ -11,7 +11,7 @@ Patron::Patron()
 	parent = nullptr;
 }
 
-Patron::Patron(GameObject* nParent)
+Patron::Patron(GameObject* nParent,int nLane)
 {
 	sprite.loadFromFile("gfx/Patron.png");
 	setTexture(&sprite);
@@ -20,6 +20,7 @@ Patron::Patron(GameObject* nParent)
 	setCollisionBox(0, 0, 32, 64);
 	satisfied = false;
 	parent = nParent;
+	lane = nLane;
 	moveSpeed = 50;
 	setPosition(nParent->getPosition().x + nParent->getSize().x, nParent->getPosition().y /*+ (nParent->getLocalBounds().height / 10)*/);
 }
@@ -43,6 +44,11 @@ void Patron::update(float dt)
 bool Patron::getSatisfied()
 {
 	return satisfied;
+}
+
+int Patron::getLane()
+{
+	return lane;
 }
 
 void Patron::collisionResponse(GameObject* collider)

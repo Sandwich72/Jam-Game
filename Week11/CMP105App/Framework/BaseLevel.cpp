@@ -15,7 +15,7 @@ BaseLevel::~BaseLevel()
 // Begins rendering to the back buffer. Background colour set to light blue.
 void BaseLevel::beginDraw()
 {
-	window->clear(sf::Color(100, 149, 237));
+	window->clear(sf::Color(0,27,54));
 }
 
 // Ends rendering to the back buffer, and swaps buffer to the screen.
